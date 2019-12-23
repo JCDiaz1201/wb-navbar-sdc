@@ -51,34 +51,10 @@ let convertToCSV = (data, count) => {
 let bulkSeedDb = () => {
   for (let a = 0; a < 8; a++) {
     setTimeout(() => { 
+
       // Connecting and seeding postgres DB
-      const connectionString = `postgres://${pgConfig.user}:${pgConfig.password}@${pgConfig.host}:${pgConfig.port}/${pgConfig.database}`
-      const connection = new Client({connectionString});
-      connection.connect()
 
-      // let inputFile = path.join(__dirname, `./csv/test${a}.csv`)
-      // let stream = connection.query(
-      //   copyFrom(`COPY westbuy (productName,price,sku,model,onHand,imageUrl) FROM '${inputFile}' WITH (FORMAT csv);`)
-      // )
-
-      // let fileStream = fs.createReadStream(inputFile)
-
-      // fileStream.on('error', (error) =>{
-      //   console.log(`Error in reading file: ${error}`)
-      // })
-      // stream.on('error', (error) => {
-      //   console.log(`Error in copy command: ${error}`)
-      // })
-      // stream.on('end', () => {
-      //   console.log(`Completed loading data into ${targetTable}`)
-      //   connection.end()
-      // })
-      // fileStream.pipe(stream);
-
-      let command = connection.query(
-        `COPY westbuy (productName,price,sku,model,onHand,imageUrl) FROM '/Users/jdiaz/WorkSpace/hackReactor/SDC/Navbar-master/server/db/csv/test${a}.csv' WITH (FORMAT csv);`
-      ) 
-       
+      let command = `psql -d west_buy_2 --user=jdiaz -c "COPY westbuy (productName,price,sku,model,onHand,imageUrl) FROM '/Users/jdiaz/WorkSpace/hackReactor/SDC/Navbar-master/server/db/csv/test${a}.csv' WITH (FORMAT csv);"` 
       exec(command, function(error, stdout, stderr) {
         // do whatever you need during the callback
         if (error) {
@@ -87,7 +63,6 @@ let bulkSeedDb = () => {
         }
         console.log(`stdout: ${stdout}`);
         console.error(`stderr: ${stderr}`);
-        connection.end()
       });
 
       // Connecting and seeding to mongo DB
@@ -109,22 +84,20 @@ let bulkSeedDb = () => {
 let outputDataToCSV = () => {
   const testPath = './Users/jdiaz/workspace/hackReactor/SDC/Navbar-master/server/db/csv/test0.csv';
 
-  // try {
-  //   if (fs.existsSync(testPath)) {
-  //     console.log("File already exits, will attempt to seed DB now....")
-  //   } else {
-  //     let dataSet = makeFakeData();
-  //     for (let a = 0; a < 8; a++) {
-  //       setTimeout(() => { convertToCSV(dataSet, a); }, 30000 * a);
-  //     }
-  //   }
-  // } catch(err) {
-  //   console.error(err);
-  // }
+  try {
+    if (fs.existsSync(testPath)) {
+      console.log("File already exits, will attempt to seed DB now....")
+    } else {
+      let dataSet = makeFakeData();
+      for (let a = 0; a < 8; a++) {
+        setTimeout(() => { convertToCSV(dataSet, a); }, 30000 * a);
+      }
+    }
+  } catch(err) {
+    console.error(err);
+  }
 
-  // 252000
-
-  setTimeout(() => { bulkSeedDb(); }, 3000);
+  setTimeout(() => { bulkSeedDb(); }, 252000);
 }
   
 outputDataToCSV();
