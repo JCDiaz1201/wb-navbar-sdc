@@ -1,0 +1,16 @@
+db.users.insertOne(
+    {
+        name: "JD",
+        age: "23",
+        status: "A",
+        groups: ["Editor", "Manager"]
+    }
+)
+
+db.users.find() // this is the equivalent of SELECT * FROM users
+db.users.find({name: "JD"}) // this is the where clause
+
+// below is essentially the command to copy csv files to mongodb effceintly 
+/data/mongodb-macos-x86_64-4.2.2/bin/
+(+)
+mongoimport --host=127.0.0.1 -d westbuy -c products --type csv --file /Users/jdiaz/WorkSpace/hackReactor/SDC/Navbar-master/server/db/csv/test1.csv --headerline 

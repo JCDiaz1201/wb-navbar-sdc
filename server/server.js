@@ -12,51 +12,62 @@ app.use(bodyParser.json());
 app.use(express.static('../serverTest'));
 
 // Following four methods are CRUD operations
+
+let selectedItemId = 99845;
+let itemToInsert = {
+  "productname": "Tianna Gregory",
+  "price": "PRICELESS",
+  "sku": "12-83940",
+  "model": "Yes",
+  "onhand": "1",
+  "imageurl": "https://albina.com"
+}
+
 app.get("/getproduct", (req, res) => {
-  res.send(db.getProduct());
-  res.end()
-  // .then((msg) => {
-  //   res.send(msg);
-  //   res.end();
-  // })
-  // .catch(err => {
-  //   res.end(err);
-  // });
+  db.getProduct(selectedItemId)
+  .then((msg) => {
+    res.send(msg);
+    res.end();
+  })
+  .catch((err) => {
+    res.end(err);
+  });
 });
 
 app.post("/postproduct", (req, res) => {
-  res.send(db.postProduct());
-    // .then((msg) => {
-    //   res.send(msg);
-    //   res.end();
-    // })
-    // .catch(err => {
-    //   res.end(err);
-    // });
+  db.postProduct(itemToInsert)
+  .then(() => {
+    res.send("Posted");
+    res.end();
+  })
+  .catch(err => {
+    res.end(err);
+  });
 });
 
 app.put("/putproduct", (req, res) => {
-  res.send(db.putProduct());
-    // .then((msg) => {
-    //   res.send(msg);
-    //   res.end();
-    // })
-    // .catch(err => {
-    //   res.end(err);
-    // });
+  db.putProduct()
+  .then(() => {
+    res.send("Updated");
+    res.end();
+  })
+  .catch((err) => {
+    res.end(err);
+  });
 });
 
 app.delete("/deleteproduct", (req, res) => {
-  res.send(db.deleteProduct());
-    // .then((msg) => {
-    //   res.send(msg);
-    //   res.end();
-    // })
-    // .catch(err => {
-    //   res.end(err);
-    // });
+  db.deleteProduct()
+  .then(() => {
+    res.send("Deleted");
+    res.end();
+  })
+  .catch((err) => {
+    res.end(err);
+  });
 });
 
 app.listen(port, function() {
   console.log(`listening on port ${port}`);
 });
+
