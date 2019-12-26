@@ -4,5 +4,5 @@ node_modules
 
 
 /s3_uploader.js
-csv
-/db.config.js
+csv/
+db.config.js
