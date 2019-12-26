@@ -29,7 +29,8 @@ let makeFakeData = () => {
 
 let convertToCSV = (data, count) => {
     const csvWriter = createCsvWriter({
-        path: `/Users/jdiaz/WorkSpace/hackReactor/SDC/Navbar-master/server/db/csv/test${count}.csv`,
+        path: `/Users/jdiaz/WorkSpace/hackReactor/SDC/\
+                Navbar-master/server/db/csv/test${count}.csv`,
         header: [
                 // {id:'id', title:'id'},
                 {id:'productName', title:'productName'},
@@ -54,7 +55,14 @@ let bulkSeedDb = () => {
 
       // Connecting and seeding postgres DB
 
-      let command = `psql -d west_buy_2 --user=jdiaz -c "COPY westbuy (productName,price,sku,model,onHand,imageUrl) FROM '/Users/jdiaz/WorkSpace/hackReactor/SDC/Navbar-master/server/db/csv/test${a}.csv' WITH (FORMAT csv);"` 
+      let command = `psql \
+      -d west_buy_2 \
+      --user=jdiaz \
+      -c "COPY westbuy (productName,price,sku,model,onHand,imageUrl) \
+      FROM '/Users/jdiaz/WorkSpace/hackReactor/SDC/Navbar-master/server/db/csv/test${a}.csv' \
+      WITH (FORMAT csv);"` 
+
+
       exec(command, function(error, stdout, stderr) {
         // do whatever you need during the callback
         if (error) {

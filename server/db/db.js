@@ -3,14 +3,15 @@ const { Client } = require('pg');
 const pgConfig  = require("./db.config");
 const {MongoClient, ObjectId} = require('mongodb');
 const assert = require('assert');
+const faker = require('faker');
 
 //below is for a postgres connection
 const connection = new Client(pgConfig);
 connection.connect();
 
-let getProduct = (itemToReturn) => {
-    // Above is for testing purposes 
 
+let getProduct = (itemToReturn) => {
+    
     // below is for postgres
     return new Promise((resolve, reject) => {
       connection.query(`SELECT * FROM westbuy WHERE id=${itemToReturn}`, (error, result) => {
@@ -20,6 +21,8 @@ let getProduct = (itemToReturn) => {
         resolve(result.rows);
       });
     });
+
+
 
     // below is for mongoDb
     // return new Promise((resolve, reject) => {
@@ -45,58 +48,116 @@ let getProduct = (itemToReturn) => {
   };
   
   let postProduct = (product) => {
+    
     // below is for postgres
-    return new Promise((resolve, reject) => {
+    // return new Promise((resolve, reject) => {
+    //   let insertProductQuery = `INSERT INTO westbuy (productname, price, sku, model, onHand, imageurl)
+    //    VALUES ('${product.productname}','${product.price}','${product.sku}',
+    //    '${product.model}','${product.onHand}','${product.imageurl}')
+    //    `
 
-      let insertProductQuery = `INSERT INTO westbuy (productname, price, sku, model, onHand, imageurl)
-       VALUES ('${product.productname}','${product.price}','${product.sku}',
-       '${product.model}','${product.onHand}','${product.imageurl}')
-       `
-
-      connection.query(insertProductQuery, (error, result) => {
-        if (error) {SA
-          reject(error);
-        }
-        resolve(result);
-      });
-    });
+    //   connection.query(insertProductQuery, (error, result) => {
+    //     if (error) {SA
+    //       reject(error);
+    //     }
+    //     resolve(result);
+    //   });
+    // });
 
     // below is for mongoDb
+    return new Promise((resolve, reject) => {
+      const url = 'mongodb://localhost:27017'
+      MongoClient.connect(url, (err, client) => {
+        if (err) {
+          console.error(err);
+          reject(err);
+        }
+
+        const db = client.db('westbuy');
+        db.collection('products').insertOne({
+          "productName": "THE SAUCE BRO",
+          "price": "0",
+          "sku": "123.45.67.89",
+          "model": "Tianna G.",
+          "onHand": "0",
+          "imageUrl": "https://JD.org"
+        });
+        client.close();
+      });
+      resolve("Record Posted!")
+    })
   };
 
   let putProduct = () => {
-    // below is for postgres
-    let newModel = "No"
-    let productName = "Tianna Gregory";
-    return new Promise((resolve, reject) => {
-      let insertProductQuery = `UPDATE westbuy SET model= '${newModel}' WHERE productName='${productName}'`
 
-      connection.query(insertProductQuery, (error, result) => {
-        if (error) {
-          reject(error);
-        }
-        resolve(result);
-      });
-    });
+    // below is for postgres
+    // let newModel = "No"
+    // let productName = "Tianna Gregory";
+    // return new Promise((resolve, reject) => {
+    //   let insertProductQuery = `UPDATE westbuy SET model= '${newModel}' WHERE productName='${productName}'`
+
+    //   connection.query(insertProductQuery, (error, result) => {
+    //     if (error) {
+    //       reject(error);
+    //     }
+    //     resolve(result);
+    //   });
+    // });
 
     // below is for mongoDb
+    return new Promise((resolve, reject) => {
+      const url = 'mongodb://localhost:27017'
+      MongoClient.connect(url, (err, client) => {
+        if (err) {
+          console.error(err);
+          reject(err);
+        }
+
+        const db = client.db('westbuy');
+        db.collection('products').update(
+          {"productName": "THE SAUCE BRO"},
+          {
+            $set: {"price": "100 Orens"}
+          }
+        );
+        client.close();
+      });
+      resolve("Record Updated!")
+    })
   };
 
   let deleteProduct = () => {
-    // below is for postgres
-    return new Promise((resolve, reject) => {
-      let name = "Tianna Gregory";
-      let deleteProductQuery = `DELETE FROM westbuy WHERE productName='${name}'`
 
-      connection.query(deleteProductQuery, (error, result) => {
-        if (error) {
-          reject(error);
-        }
-        resolve(result);
-      });
-    });
+    // below is for postgres
+    // return new Promise((resolve, reject) => {
+    //   let name = "Tianna Gregory";
+    //   let deleteProductQuery = `DELETE FROM westbuy WHERE productName='${name}'`
+
+    //   connection.query(deleteProductQuery, (error, result) => {
+    //     if (error) {
+    //       reject(error);
+    //     }
+    //     resolve(result);
+    //   });
+    // });
 
     // below is for mongoDb
+    return new Promise((resolve, reject) => {
+      const url = 'mongodb://localhost:27017'
+      MongoClient.connect(url, (err, client) => {
+        if (err) {
+          console.error(err);
+          reject(err);
+        }
+
+        const db = client.db('westbuy');
+        db.collection('products').deleteOne(
+          {"productName": "THE SAUCE BRO"}
+        );
+        client.close();
+      });
+      resolve("Record Deleted!")
+    })
   };
   
   // let seedDatabase = () => {

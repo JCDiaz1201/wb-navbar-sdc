@@ -36,8 +36,8 @@ app.get("/getproduct", (req, res) => {
 
 app.post("/postproduct", (req, res) => {
   db.postProduct(itemToInsert)
-  .then(() => {
-    res.send("Posted");
+  .then((msg) => {
+    res.send(msg);
     res.end();
   })
   .catch(err => {
@@ -47,8 +47,8 @@ app.post("/postproduct", (req, res) => {
 
 app.put("/putproduct", (req, res) => {
   db.putProduct()
-  .then(() => {
-    res.send("Updated");
+  .then((msg) => {
+    res.send(msg);
     res.end();
   })
   .catch((err) => {
@@ -58,8 +58,8 @@ app.put("/putproduct", (req, res) => {
 
 app.delete("/deleteproduct", (req, res) => {
   db.deleteProduct()
-  .then(() => {
-    res.send("Deleted");
+  .then((msg) => {
+    res.send(msg);
     res.end();
   })
   .catch((err) => {
